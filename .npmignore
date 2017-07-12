@@ -5,9 +5,3 @@
 .babelrc
 
 node_modules
-
-src
-test
-index.html
-webpack.config.js
-webpack.dev.config.js
