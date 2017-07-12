@@ -1,20 +1,23 @@
 {
   "name": "gitmint",
-  "version": "0.0.3",
+  "version": "0.0.3-update.1",
   "description": "A mint on Gitment",
   "main": "./dist/gitment.js",
   "author": {
     "name": "Shiquan Sun",
     "url": "https://github.com/imsun"
   },
-  "contributors": [{
-    "name": "Shiquan Sun",
-    "url": "https://github.com/imsun"
-  },{
-    "name": "aimingoo",
-    "email": "aiming@gmail.com",
-    "url": "https://github.com/aimingoo"
-  }],
+  "contributors": [
+    {
+      "name": "Shiquan Sun",
+      "url": "https://github.com/imsun"
+    },
+    {
+      "name": "aimingoo",
+      "email": "aiming@gmail.com",
+      "url": "https://github.com/aimingoo"
+    }
+  ],
   "keywords": [
     "Gitment",
     "comment system",

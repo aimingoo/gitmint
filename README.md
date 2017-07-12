@@ -141,6 +141,6 @@ update const `force_redirect_protocol` in gitment.js, make sure it same to proto
 ## History
 
 ```
-2017.07.12 create gitmind, first release.
+2017.07.12 create gitmint, first release.
 2017.05.30 fork and push some commits to Gitment.
 ```
