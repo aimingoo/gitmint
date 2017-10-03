@@ -19,10 +19,12 @@ function extendRenderer(instance, renderer) {
 
     autorun(() => {
       const e = render(instance.state, instance)
-      if (targetContainer.firstChild) {
-        targetContainer.replaceChild(e, targetContainer.firstChild)
-      } else {
-        targetContainer.appendChild(e)
+      if (e) {
+        if (targetContainer.firstChild) {
+          targetContainer.replaceChild(e, targetContainer.firstChild)
+        } else {
+          targetContainer.appendChild(e)
+        }
       }
     })
 
@@ -40,7 +42,7 @@ class Gitment {
 
   get loginLink() {
     const oauthUri = 'https://github.com/login/oauth/authorize'
-    const redirect_uri = this.oauth.redirect_uri || window.location.href.replace(/^https?/i, force_redirect_protocol)
+    const redirect_uri = this.oauth.redirect_uri || window.location.href.replace(/^https?/i, this.oauth.redirect_protocol || force_redirect_protocol)
 
     const oauthParams = Object.assign({
       scope,
@@ -53,6 +55,19 @@ class Gitment {
   constructor(options = {}) {
     this.defaultTheme = defaultTheme
     this.useTheme(defaultTheme)
+
+    var internalId
+    Object.defineProperties(this, {
+      'updateCount': {
+        value: new Function,
+        writable: true
+      },
+      'id': {
+        get: () => internalId,
+        set: (id) => internalId = (id !== window.location.href) ? id :
+          `${window.location.origin}${window.location.pathname}${window.location.search}`
+      }
+    })
 
     Object.assign(this, {
       id: window.location.href,
@@ -183,6 +198,7 @@ class Gitment {
       })
       .then(data => {
         this.state.meta.comments++
+        this.updateCount()
         const pageCount = Math.ceil(this.state.meta.comments / this.perPage)
         if (this.state.currentPage === pageCount) {
           this.state.comments.push(data)
@@ -200,6 +216,7 @@ class Gitment {
       .then(issues => {
         if (!issues.length) return Promise.reject(NOT_INITIALIZED_ERROR)
         this.state.meta = issues[0]
+        this.updateCount()
         return issues[0]
       })
   }

@@ -1,10 +1,13 @@
 import { github as githubIcon, heart as heartIcon, spinner as spinnerIcon } from '../icons'
 import { NOT_INITIALIZED_ERROR } from '../constants'
-import { chinese as $ } from '../translator'
+import defaultTranslator, * as translator from '../translator'
+
+const culture = /^([^-]{1,3})(-|$)/
+var $ = (x) => defaultTranslator(x)
 
 function renderHeader({ meta, user, reactions }, instance) {
   const container = document.createElement('div')
-  container.lang = "en-US"
+  container.lang = culture.test(instance.lang) ? instance.lang : "en-US"
   container.className = 'gitment-container gitment-header-container'
 
   const likeButton = document.createElement('span')
@@ -54,7 +57,7 @@ function renderHeader({ meta, user, reactions }, instance) {
 
 function renderComments({ meta, comments, commentReactions, currentPage, user, error }, instance) {
   const container = document.createElement('div')
-  container.lang = "en-US"
+  container.lang = culture.test(instance.lang) ? instance.lang : "en-US"
   container.className = 'gitment-container gitment-comments-container'
 
   if (error) {
@@ -204,11 +207,11 @@ function renderComments({ meta, comments, commentReactions, currentPage, user, e
 
 function renderEditor({ user, error }, instance) {
   const container = document.createElement('div')
-  container.lang = "en-US"
+  container.lang = culture.test(instance.lang) ? instance.lang : "en-US"
   container.className = 'gitment-container gitment-editor-container'
 
   const shouldDisable = user.login && !error ? '' : 'disabled'
-  const disabledTip = user.login ? '' : 'Login to Comment'
+  const disabledTip = user.login ? '' : $('Login to Comment')
   container.innerHTML = `
       ${ user.login
         ? `<a class="gitment-editor-avatar" href="${user.html_url}" target="_blank">
@@ -319,9 +322,9 @@ function renderEditor({ user, error }, instance) {
   return container
 }
 
-function renderFooter() {
+function renderFooter(state, instance) {
   const container = document.createElement('div')
-  container.lang = "en-US"
+  container.lang = culture.test(instance.lang) ? instance.lang : "en-US"
   container.className = 'gitment-container gitment-footer-container'
   container.innerHTML = `
     Powered by
@@ -332,9 +335,23 @@ function renderFooter() {
   return container
 }
 
+function renderCounter({meta}, instance) {
+  const counter = document.querySelector(".post-comments-count.gitment-comments-count");
+  if (counter &&
+     // (instance.id.lastIndexOf(counter.getAttribute('data-xid')) > -1) &&
+     (counter.getAttribute('itemprop') == "commentsCount")) {
+    counter.innerText = meta && meta.comments || 0;
+  }
+}
+
 function render(state, instance) {
   const container = document.createElement('div')
-  container.lang = "en-US"
+  container.lang = culture.test(instance.lang) ? instance.lang : "en-US"
+
+  // rewrite by gitmint
+  $ = instance.lang && translator[instance.lang] || translator.fromLanguageCode(container.lang)
+  instance.updateCount = () => instance.renderCounter(state, instance)
+
   container.className = 'gitment-container gitment-root-container'
   container.appendChild(instance.renderHeader(state, instance))
   container.appendChild(instance.renderComments(state, instance))
@@ -343,4 +360,4 @@ function render(state, instance) {
   return container
 }
 
-export default { render, renderHeader, renderComments, renderEditor, renderFooter }
+export default { render, renderHeader, renderComments, renderEditor, renderFooter, renderCounter }
