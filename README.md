@@ -23,10 +23,12 @@ A mint on Gitment, the gitment is a comment system based on GitHub Issues.
   - to choose both https://gh-oauth.imsun.net and [gh-oauth-server](https://github.com/imsun/gh-oauth-server), or
   - php oauth proxy [intersect](https://github.com/aimingoo/intersect), or
   - other api proxy/gateway
-- Force redirect protocol to support HTTPS/HTTP Github pages site, 
+- Force redirect protocol to support HTTPS/HTTP Github pages site
+- Support comments count show and update
 - Support urlencoded for GET request and response data
 - Language translator for default/other theme, a simple method
 - No client_secret
+- hexo-theme-next friendly
 
 ## Get Started
 
@@ -121,13 +123,38 @@ import { chinese as $ } from '../translator'
 
 // translate 'Comment' from english to chinese
 submitButton.innerText = $('Comment')
+
+
+// OR, switch to language
+import * as translator from '../translator'
+var $ = translator.fromLanguageCode('zh-CN');
+...
+submitButton.innerText = $('Comment')
 ```
 
 update the translator.js module to support more text and languages.
 
 ### Force redirect protocol
 
-update const `force_redirect_protocol` in gitment.js, make sure it same to protocol of the callback URL in Github OAuth application's settings.
+set oauth option:
+
+```
+const gitment = new Gitmint({
+  ...
+  oauth: {
+    redirect_protocol: 'https',
+    ...
+  ...
+```
+make sure it same to protocol of the callback URL in Github OAuth application's settings.
+
+### Comments count show and update
+
+make a html block, gitmint will automatic update it:
+
+```html
+<span class="post-comments-count gitment-comments-count" itemprop="commentsCount"></span>
+```
 
 ## Methods and Customize
 
@@ -141,6 +168,7 @@ update const `force_redirect_protocol` in gitment.js, make sure it same to proto
 ## History
 
 ```
+2017.10.03 v"0.0.3-update.2 released, hexo-theme-next friendly and more features.
 2017.07.12 create gitmint, first release.
 2017.05.30 fork and push some commits to Gitment.
 ```
