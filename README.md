@@ -168,7 +168,7 @@ make a html block, gitmint will automatic update it:
 ## History
 
 ```
-2017.10.03 v"0.0.3-update.2 released, hexo-theme-next friendly and more features.
+2017.10.03 v0.0.3-update.2 released, hexo-theme-next friendly and more features.
 2017.07.12 create gitmint, first release.
 2017.05.30 fork and push some commits to Gitment.
 ```
