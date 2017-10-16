@@ -134,6 +134,23 @@ submitButton.innerText = $('Comment')
 
 update the translator.js module to support more text and languages.
 
+### Multi languages in Gitmint
+
+set language code in options:
+
+```javascript
+const gitment = new Gitmint({
+  lang: 'zh-CN',
+  ...
+```
+
+the language code format:
+
+* https://www.w3.org/TR/1999/REC-html401-19991224/struct/dirlang.html#h-8.1.1
+* https://gist.github.com/JamieMason/3748498
+
+and support 'en-US' and 'zh-CN' now. Maybe you can do more for this feature. :)
+
 ### Force redirect protocol
 
 set oauth option:
