@@ -24,6 +24,7 @@ A mint on Gitment, the gitment is a comment system based on GitHub Issues.
   - php oauth proxy [intersect](https://github.com/aimingoo/intersect), or
   - other api proxy/gateway
 - Force redirect protocol to support HTTPS/HTTP Github pages site
+- Support organization repository
 - Support comments count show and update
 - Support urlencoded for GET request and response data
 - Language translator for default/other theme, a simple method
@@ -113,6 +114,17 @@ const gitment = new Gitmint({
 
 proxy/gateway is a service, @see [aimingoo/intersect](https://github.com/aimingoo/intersect)
 
+### Organization repository
+
+The option `admin` is string array, support a set of organization repository's adminstrarories. the string array ignore lower/uppercase, and anyone can initialize your post's comments. so them need have write/create-issues access of organization repository. ex:
+
+```
+const gitment = new Gitmint({
+  owner: 'GitHub ID of organization repository',
+  admin: ['user1', 'user2'],
+  ...
+```
+
 ### Language translator
 
 translator module is included, use it in your theme. example in src/theme/default.js:
@@ -149,7 +161,7 @@ the language code format:
 * https://www.w3.org/TR/1999/REC-html401-19991224/struct/dirlang.html#h-8.1.1
 * https://gist.github.com/JamieMason/3748498
 
-and support 'en-US' and 'zh-CN' now. Maybe you can do more for this feature. :)
+and support 'en-US', 'zh-CN' and 'zh-TW' now. Maybe you can do more for this feature. :)
 
 ### Force redirect protocol
 
@@ -163,7 +175,7 @@ const gitment = new Gitmint({
     ...
   ...
 ```
-make sure it same to protocol of the callback URL in Github OAuth application's settings.
+make sure it same to protocol of the callback URL in Github OAuth application's settings. by default, the protocol will get from current location href.
 
 ### Comments count show and update
 
@@ -185,6 +197,7 @@ make a html block, gitmint will automatic update it:
 ## History
 
 ```
+2017.10.26 v0.0.3-update.3 released, support organization repo, and defalt force redirect protocol updated.
 2017.10.03 v0.0.3-update.2 released, hexo-theme-next friendly and more features.
 2017.07.12 create gitmint, first release.
 2017.05.30 fork and push some commits to Gitment.

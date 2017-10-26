@@ -8,7 +8,7 @@ import defaultTheme from './theme/default'
 const scope = 'public_repo'
 
 // Github setting of 'Authorization callback URL' in your OAuth application
-const force_redirect_protocol = 'https'
+const force_redirect_protocol = '$&'
 // A RegExp to match protocol and domain
 const rx_url_with_protocol = /^((https?:\/\/+){0,1}[^\/]*)(.*)/
 
@@ -208,12 +208,16 @@ class Gitment {
   }
 
   loadMeta() {
-    const { id, owner, repo } = this
-    return http.get(`/repos/${owner}/${repo}/issues`, {
-        creator: owner,
-        labels: id,
-      })
+    const { id, owner, admin, repo } = this
+    return http.get(`/repos/${owner}/${repo}/issues`, {labels: id})
       .then(issues => {
+        if (issues.length) {
+          // recheck creator for organization
+          //  - or check 'issue.user.login and issue.user.site_admin' ?
+          let allowed = (admin || [owner]).map(x=>x.toLowerCase())
+          issues = issues.filter(issue => ~allowed.indexOf(issue.user.login.toLowerCase()))
+            .sort((left, right) => new Date(left.created_at) - new Date(right.created_at))
+        }
         if (!issues.length) return Promise.reject(NOT_INITIALIZED_ERROR)
         this.state.meta = issues[0]
         this.updateCount()

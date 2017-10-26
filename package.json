@@ -1,6 +1,6 @@
 {
   "name": "gitmint",
-  "version": "0.0.3-update.2",
+  "version": "0.0.3-update.3",
   "description": "A mint on Gitment",
   "main": "./dist/gitment.js",
   "author": {
