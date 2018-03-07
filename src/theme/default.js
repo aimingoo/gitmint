@@ -353,12 +353,13 @@ function render(state, instance) {
   $ = instance.lang && translator[instance.lang] || translator.fromLanguageCode(container.lang)
   instance.updateCount = () => instance.renderCounter(state, instance)
 
-  container.className = 'gitment-container gitment-root-container'
-  container.appendChild(instance.renderHeader(state, instance))
-  container.appendChild(instance.renderComments(state, instance))
-  container.appendChild(instance.renderEditor(state, instance))
-  container.appendChild(instance.renderFooter(state, instance))
-  return container
+  container.className = 'gitment-container gitment-root-container';
+  var parts = (!instance.above) ? ['renderHeader', 'renderComments', 'renderEditor', 'renderFooter']
+    : ['renderHeader', 'renderEditor', 'renderFooter', 'renderComments'];
+  parts.forEach(function(partName) {
+    container.appendChild(instance[partName](state, instance));
+  });
+  return container;
 }
 
 export default { render, renderHeader, renderComments, renderEditor, renderFooter, renderCounter }
